@@ -3,7 +3,7 @@ const KEY_CODE_LEFT = 37;
 const KEY_CODE_RIGHT = 39;
 const KEY_CODE_SPACE = 32;
 
-
+//Game Setting
 const GAME_WIDTH = 1000;
 const GAME_HEIGHT = 600;
 //player setting
@@ -12,11 +12,11 @@ const PLAYER_MAX_SPEED = 500.0;
 const LASER_MAX_SPEED = 300.0;
 const LASER_COOLDOWN = 0.3;
 //Enemy setting
-const ENEMIES_PER_ROW = 10;
+const ENEMIES_PER_ROW = 9;
 const ENEMY_HORIZONTAL_PADDING = 80;
 const ENEMY_VERTICAL_PADDING = 70;
 const ENEMY_VERTICAL_SPACING = 80;
-const ENEMY_COOLDOWN = 1.5;
+const ENEMY_COOLDOWN = 2;
 
 const GAME_STATE = {
   lastTime: Date.now(),
@@ -31,10 +31,7 @@ const GAME_STATE = {
   enemyLasers: [],
   gameOver: false
 };
-
-
-
-
+//check the collision part about laser hitting the spaceship
 function rectsIntersect(r1, r2) {
   return !(
     r2.left > r1.right ||
@@ -74,13 +71,6 @@ function createPlayer($container) {
   setPosition($player, GAME_STATE.playerX, GAME_STATE.playerY);
 }
 
-function destroyPlayer($container, player) {
-  $container.removeChild(player);
-  GAME_STATE.gameOver = true;
-  const audio = new Audio("./playerhit.mp3");
-  audio.play(); 
-
-}
 //control the player update ver.
 function updatePlayer(dt, $container) {
   if (GAME_STATE.leftPressed) {
@@ -107,6 +97,13 @@ function updatePlayer(dt, $container) {
   const $player = document.querySelector(".player");
   setPosition($player, GAME_STATE.playerX, GAME_STATE.playerY);
 }
+function destroyPlayer($container, player) {
+  $container.removeChild(player);
+  GAME_STATE.gameOver = true;
+  const audio = new Audio("./playerhit.mp3");
+  audio.play();
+
+}
 //create the laser
 function createLaser($container, x, y) {
   const $element = document.createElement("img");
@@ -115,9 +112,13 @@ function createLaser($container, x, y) {
   const audio = new Audio("./hit.mp3");
   audio.play();
   $container.appendChild($element);
-  const laser = {x,y,$element};
+  const laser = { x,y,$element};
   GAME_STATE.lasers.push(laser);
   setPosition($element, x, y);
+}
+function destroyLaser($container, laser) {
+  $container.removeChild(laser.$element);
+  laser.isDead = true;
 }
 //adding the loop if the laser y axis is < then 0 destory it 
 function updateLasers(dt, $container) {
@@ -130,6 +131,7 @@ function updateLasers(dt, $container) {
     }
     //setting the hit enemy and laser 
     setPosition(laser.$element, laser.x, laser.y);
+    //setting the small box like canvas
     const r1 = laser.$element.getBoundingClientRect();
     const enemies = GAME_STATE.enemies;
     for (let j = 0; j < enemies.length; j++) {
@@ -147,10 +149,6 @@ function updateLasers(dt, $container) {
   GAME_STATE.lasers = GAME_STATE.lasers.filter(e => !e.isDead);
 }
 // remove the laser 
-function destroyLaser($container, laser) {
-  $container.removeChild(laser.$element);
-  laser.isDead = true;
-}
 
 function createEnemy($container, x, y) {
   const $element = document.createElement("img")
@@ -158,14 +156,19 @@ function createEnemy($container, x, y) {
   $element.className = "enemy";
   $container.appendChild($element);
   //random shooting time and place
-  const enemy = {x,y,cooldown: random(0.5, ENEMY_COOLDOWN),$element};
+  const enemy = {
+    x,
+    y,
+    cooldown: random(0.5, ENEMY_COOLDOWN),
+    $element
+  };
   GAME_STATE.enemies.push(enemy);
   setPosition($element, x, y)
 }
-
+//Making enemies spaceship Left/Right up/down movement
 function updateEnemies(dt, $container) {
   const dx = Math.sin(GAME_STATE.lastTime / 1000.0) * 50;
-  const dy = Math.cos(GAME_STATE.lastTime / 1000.0) * 50;
+  const dy = Math.cos(GAME_STATE.lastTime / 800.0) * 70;
 
   const enemies = GAME_STATE.enemies;
   for (let i = 0; i < enemies.length; i++) {
@@ -174,7 +177,7 @@ function updateEnemies(dt, $container) {
     const y = enemy.y + dy;
     setPosition(enemy.$element, x, y);
     enemy.cooldown -= dt;
-    if (enemy.cooldown <= 0) {
+    if (enemy.cooldown <= 1) {
       createEnemyLaser($container, x, y);
       enemy.cooldown = ENEMY_COOLDOWN;
     }
@@ -193,7 +196,11 @@ function createEnemyLaser($container, x, y) {
   $element.src = "img/enemylaser.png";
   $element.className = "enemy-laser";
   $container.appendChild($element);
-  const laser = {x,y,$element};
+  const laser = {
+    x,
+    y,
+    $element
+  };
   GAME_STATE.enemyLasers.push(laser);
   setPosition($element, x, y);
 }
@@ -292,4 +299,3 @@ init();
 window.addEventListener("keydown", onKeyDown);
 window.addEventListener("keyup", onKeyUp);
 window.requestAnimationFrame(update);
-
