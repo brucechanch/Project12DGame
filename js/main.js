@@ -32,6 +32,9 @@ const GAME_STATE = {
   gameOver: false
 };
 
+
+
+
 function rectsIntersect(r1, r2) {
   return !(
     r2.left > r1.right ||
@@ -74,6 +77,9 @@ function createPlayer($container) {
 function destroyPlayer($container, player) {
   $container.removeChild(player);
   GAME_STATE.gameOver = true;
+  const audio = new Audio("./playerhit.mp3");
+  audio.play(); 
+
 }
 //control the player update ver.
 function updatePlayer(dt, $container) {
@@ -106,6 +112,8 @@ function createLaser($container, x, y) {
   const $element = document.createElement("img");
   $element.src = "img/laser.png";
   $element.className = "laser";
+  const audio = new Audio("./hit.mp3");
+  audio.play();
   $container.appendChild($element);
   const laser = {x,y,$element};
   GAME_STATE.lasers.push(laser);
@@ -177,6 +185,7 @@ function updateEnemies(dt, $container) {
 function destroyEnemy($container, enemy) {
   $container.removeChild(enemy.$element);
   enemy.isDead = true;
+
 }
 
 function createEnemyLaser($container, x, y) {
@@ -274,7 +283,13 @@ function onKeyUp(e) {
     GAME_STATE.spacePressed = false;
   }
 }
+const backgroundMusic = document.getElementById("backgroundMusic")
+backgroundMusic.play();
+
+
+
 init();
 window.addEventListener("keydown", onKeyDown);
 window.addEventListener("keyup", onKeyUp);
 window.requestAnimationFrame(update);
+
