@@ -41,19 +41,11 @@ footer {
   width: 800px;
   height: 600px;
   background: url(../img/bg.png);
-  animation: scroll-background 1s linear infinite;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
   position: relative;
 }
 
-@keyframes scroll-background {
-  from {
-    background-position-y: 0px;
-  }
-  to {
-    background-position-y: 256px;
-  }
-}
+
 
 .game .enemy {
   position: absolute;
@@ -117,19 +109,4 @@ footer {
   );
   padding: 10px 40px;
   font: 14px sans-serif;
-}
-@keyframes pop-in {
-  0% {
-    opacity: 0;
-    transform: translate(0, -100px);
-  }
-  10% {
-    opacity: 1;
-  }
-  50% {
-    transform: translate(0, 30px);
-  }
-  100% {
-    transform: translate(0, 0);
-  }
 }

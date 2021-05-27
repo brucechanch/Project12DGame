@@ -74,7 +74,7 @@ function destroyPlayer($container, player) {
   $container.removeChild(player);
   GAME_STATE.gameOver = true;
 }
-//control the player undate ver.
+//control the player update ver.
 function updatePlayer(dt, $container) {
   if (GAME_STATE.leftPressed) {
     GAME_STATE.playerX -= dt * PLAYER_MAX_SPEED;
