@@ -38,7 +38,7 @@ footer {
   background: #222;
 }
 .game {
-  width: 800px;
+  width: 1000px;
   height: 600px;
   background: url(../img/bg.png);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
@@ -75,13 +75,13 @@ footer {
 .congratulations {
   display: none;
   position: absolute;
-  background: #c7a526;
+  background: #252524;
   color: white;
   padding: 20px 50px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
   border-radius: 10px;
   text-align: center;
-  animation: pop-in 1s;
+  animation: flash 3s infinite;
 }
 
 .game-over {
@@ -93,7 +93,7 @@ footer {
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
   border-radius: 10px;
   text-align: center;
-  animation: pop-in 1s;
+  animation: flash 3s infinite;
 }
 
 .btn {
@@ -109,4 +109,13 @@ footer {
   );
   padding: 10px 40px;
   font: 14px sans-serif;
+}
+
+
+@keyframes flash{
+  0% {opacity: 1;}
+  /* 25% {opacity: 0.75} */
+  50% {opacity: 0.25;}
+  /* 75% {opacity: 0.75;} */
+  100% {opacity : 1;} 
 }

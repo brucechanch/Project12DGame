@@ -3,19 +3,20 @@ const KEY_CODE_LEFT = 37;
 const KEY_CODE_RIGHT = 39;
 const KEY_CODE_SPACE = 32;
 
-const GAME_WIDTH = 800;
+
+const GAME_WIDTH = 1000;
 const GAME_HEIGHT = 600;
 //player setting
 const PLAYER_WIDTH = 20;
 const PLAYER_MAX_SPEED = 500.0;
 const LASER_MAX_SPEED = 300.0;
-const LASER_COOLDOWN = 0.5;
+const LASER_COOLDOWN = 0.3;
 //Enemy setting
 const ENEMIES_PER_ROW = 10;
 const ENEMY_HORIZONTAL_PADDING = 80;
 const ENEMY_VERTICAL_PADDING = 70;
 const ENEMY_VERTICAL_SPACING = 80;
-const ENEMY_COOLDOWN = 2.0;
+const ENEMY_COOLDOWN = 1.5;
 
 const GAME_STATE = {
   lastTime: Date.now(),
@@ -149,7 +150,7 @@ function createEnemy($container, x, y) {
   $element.className = "enemy";
   $container.appendChild($element);
   //random shooting time and place
-  const enemy = {x,y,cooldown: random(0.8, ENEMY_COOLDOWN),$element};
+  const enemy = {x,y,cooldown: random(0.5, ENEMY_COOLDOWN),$element};
   GAME_STATE.enemies.push(enemy);
   setPosition($element, x, y)
 }
@@ -233,7 +234,7 @@ function update(e) {
   const currentTime = Date.now();
   //dt is elapsed time 
   const dt = (currentTime - GAME_STATE.lastTime) / 1000.0;
-//no matter is win or gameover  the display will be blocked
+  //no matter is win or gameover  the display will be blocked
   if (GAME_STATE.gameOver) {
     document.querySelector(".game-over").style.display = "block";
     return;
@@ -243,7 +244,7 @@ function update(e) {
     document.querySelector(".congratulations").style.display = "block";
     return;
   }
-//update all the game data
+  //update all the game data
   const $container = document.querySelector(".game");
   updatePlayer(dt, $container);
   updateLasers(dt, $container);
@@ -273,7 +274,6 @@ function onKeyUp(e) {
     GAME_STATE.spacePressed = false;
   }
 }
-
 init();
 window.addEventListener("keydown", onKeyDown);
 window.addEventListener("keyup", onKeyUp);
